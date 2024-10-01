@@ -29,7 +29,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // firebase storage
   //  allow read;
@@ -105,7 +105,7 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-      navigate('/sign-in');
+      navigate("/sign-in");
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
     }
@@ -121,7 +121,7 @@ export default function Profile() {
         return;
       }
       dispatch(signOutUserSuccess(data));
-      navigate('/sign-in');
+      navigate("/sign-in");
     } catch (error) {
       dispatch(signOutUserFailure(error.message));
     }
