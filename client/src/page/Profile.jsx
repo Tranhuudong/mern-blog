@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   getDownloadURL,
@@ -13,9 +13,13 @@ import {
   updateUserFailure,
   deleteUserFailure,
   deleteUserStart,
-  deleteUserSuccess
+  deleteUserSuccess,
+  signOutUserStart,
+  signOutUserFailure,
+  signOutUserSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 export default function Profile() {
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -25,6 +29,7 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate(); 
 
   // firebase storage
   //  allow read;
@@ -51,7 +56,7 @@ export default function Profile() {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setFilePerc(Math.round(progress));
       },
-      (error) => {
+      () => {
         setFileUploadError(true);
       },
       () => {
@@ -100,9 +105,25 @@ export default function Profile() {
         return;
       }
       dispatch(deleteUserSuccess(data));
-
+      navigate('/sign-in');
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutUserStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutUserFailure(data.message));
+        return;
+      }
+      dispatch(signOutUserSuccess(data));
+      navigate('/sign-in');
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message));
     }
   };
 
@@ -171,7 +192,9 @@ export default function Profile() {
         >
           Delete Account
         </span>
-        <span className="text-red-500 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="text-red-500 cursor-pointer">
+          Sign Out
+        </span>
       </div>
 
       <p className="text-red-700 mt-5">{error ? error : ""}</p>
