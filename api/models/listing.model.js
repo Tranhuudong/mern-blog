@@ -48,11 +48,11 @@ const listingSchema = new mongoose.Schema(
     },
     imageUrls: {
       type: Array,
-      require: true,
+      required: true,
     },
     userRef: {
       type: String,
-      require: true,
+      required: true,
     },
   },
   { timestamps: true }
