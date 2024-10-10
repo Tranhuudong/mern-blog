@@ -8,5 +8,9 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [require("flowbite-react")],
+  plugins: [
+    require("flowbite-react"),
+    require('@tailwindcss/line-clamp'),
+    // ...
+  ],
 };
