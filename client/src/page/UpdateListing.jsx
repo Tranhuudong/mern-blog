@@ -42,7 +42,20 @@ export default function CreateListing() {
         console.log(data.message);
         return;
       }
-      setFormData(data);
+
+      // xac thuc anh
+      const validImageUrls = await Promise.all(
+        data.imageUrls.map(async (url) => {
+          try {
+            const response = await fetch(url, { method: 'HEAD' });
+            return response.ok ? url : null;
+          } catch {
+            return null;
+          }
+        })
+      ).then((urls) => urls.filter((url) => url !== null));
+
+      setFormData({...data, imageUrls: validImageUrls} );
     };
     fetchListing();
   }, []);

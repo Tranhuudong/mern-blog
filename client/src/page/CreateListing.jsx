@@ -86,11 +86,23 @@ export default function CreateListing() {
     });
   };
 
-  const handleRemoveImage = (index) => {
-    setFormData({
-      ...formData,
-      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
-    });
+  const handleRemoveImage = async (index) => {
+    // setFormData({
+    //   ...formData,
+    //   imageUrls: formData.imageUrls.filter((_, i) => i !== index),
+    // });
+    const updatedImageUrls = formData.imageUrls.filter((_, i) => i !== index);
+  setFormData({
+    ...formData,
+    imageUrls: updatedImageUrls,
+  });
+
+  // Update the listing in the database
+  await fetch(`/api/listing/update/${params.listingId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ imageUrls: updatedImageUrls }),
+  });
   };
 
   const handleChange = (e) => {

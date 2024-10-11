@@ -10,7 +10,6 @@ export default {
   },
   plugins: [
     require("flowbite-react"),
-    require('@tailwindcss/line-clamp'),
     // ...
   ],
 };
